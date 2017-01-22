@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Log everything to stdout
+exec 2>&1
+
+# Start steam launcher
+su -p "$USER" -c "steam $@"

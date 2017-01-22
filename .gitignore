@@ -1,0 +1,6 @@
+./data/*
+!./data/README.md
+.*
+!./.gitignore
+!./.dockerignore
+!./.env
