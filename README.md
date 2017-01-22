@@ -18,17 +18,17 @@ This is heavily inspired in other steam-in-a-docker containers, especially:
 For the impatient
 -----------------
 
-1. Clone this repository
-    git clone https://github.com/eartiaga/sidsteam
+1. Clone this repository  
+    `git clone https://github.com/eartiaga/sidsteam`
 
-2. Go into the repository's root directory
-    cd sidsteam
+2. Go into the repository's root directory  
+    `cd sidsteam`
 
-3. Build the image
-    docker-compose build
+3. Build the image  
+    `docker-compose build`
 
-4. Launch the container
-    STEAM_USER=$(id -ru) docker-compose up
+4. Launch the container  
+    `STEAM_USER=$(id -ru) docker-compose up`
 
 Configuration
 -------------
