@@ -16,7 +16,7 @@ RUN echo "deb http://deb.debian.org/debian sid contrib non-free" \
     apt-get upgrade -qy
 
 # Install some useful packages
-RUN apt-get install -qy zenity curl dnsmasq gnupg sudo && \
+RUN apt-get install -qy zenity curl dnsmasq gnupg sudo net-tools && \
     echo "$steam_user ALL = NOPASSWD: ALL" > /etc/sudoers.d/sidsteam && \
     chmod 440 /etc/sudoers.d/sidsteam
 COPY ./dnsmasq.conf /etc/dnsmasq.conf
