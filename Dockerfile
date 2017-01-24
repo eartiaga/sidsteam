@@ -17,7 +17,7 @@ RUN echo "deb http://deb.debian.org/debian sid contrib non-free" \
 
 # Install some useful packages
 RUN apt-get install -qy zenity curl dnsmasq gnupg sudo && \
-    echo "$steam_user ALL = NOPASSWd: ALL" > /etc/sudoers.d/sidsteam && \
+    echo "$steam_user ALL = NOPASSWD: ALL" > /etc/sudoers.d/sidsteam && \
     chmod 440 /etc/sudoers.d/sidsteam
 COPY ./dnsmasq.conf /etc/dnsmasq.conf
 
@@ -36,12 +36,15 @@ RUN echo \
 RUN apt-get install -qy steam-launcher && \
     rm -f /etc/apt/sources.list.d/bootstrap-steampowered.list && \
     apt-get update -qy
-ENV STEAM_RUNTIME 0
+ENV STEAM_RUNTIME 1
 
 # Install Steam dependencies
 RUN apt-get install -qy \
-      locales libnm-util2 libnm-glib4 libnss3 libxss1 pulseaudio \
-      libpulse0 libgconf-2-4 && \
+      locales libgconf-2-4 \
+      libstdc++5 \
+      libnm-util2 libnm-glib4 libnss3 \
+      pulseaudio libpulse0 \
+      libxss1 libsdl2-2.0-0:i386 && \
     apt-get install -qy \
       libgl1-mesa-dri:i386 libgl1-mesa-glx:i386 \
       libsdl2-2.0-0:i386 \
@@ -59,8 +62,13 @@ RUN apt-get install -qy \
     ln -sv librtmp.so.1 /lib/i386-linux-gnu/librtmp.so.0 && \
     ln -sv librtmp.so.1 /lib/x86_64-linux-gnu/librtmp.so.0
 
-# Miscellaneous workarounds
+# Pulse workarounds
 RUN echo "enable-shm = no" >> /etc/pulse/client.conf
+
+# Obsolete libgcrypt11 work-around (for Half-Life based games)
+ADD http://archive.ubuntu.com/ubuntu/pool/main/libg/libgcrypt11/libgcrypt11_1.5.3-2ubuntu4_i386.deb /tmp/llibgcrypt11_i386.deb
+ADD http://archive.ubuntu.com/ubuntu/pool/main/libg/libgcrypt11/libgcrypt11_1.5.3-2ubuntu4_amd64.deb /tmp/llibgcrypt11_amd64.deb
+RUN cd /tmp && dpkg -i *.deb && rm -f *.deb
 
 # User setup
 ENV USER $steam_user
