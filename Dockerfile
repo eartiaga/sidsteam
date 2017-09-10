@@ -16,7 +16,7 @@ RUN echo "deb http://deb.debian.org/debian sid contrib non-free" \
     apt-get upgrade -qy
 
 # Install some useful packages
-RUN apt-get install -qy zenity curl dnsmasq gnupg sudo net-tools && \
+RUN apt-get install -qy zenity curl dnsmasq gnupg sudo net-tools attr xattr && \
     echo "$steam_user ALL = NOPASSWD: ALL" > /etc/sudoers.d/sidsteam && \
     chmod 440 /etc/sudoers.d/sidsteam
 COPY ./dnsmasq.conf /etc/dnsmasq.conf
@@ -41,11 +41,12 @@ ENV STEAM_RUNTIME 1
 # Install Steam dependencies
 RUN apt-get install -qy \
       locales libgconf-2-4 \
-      libstdc++5 \
+      libstdc++5 libc6 \
       libnm-util2 libnm-glib4 libnss3 \
       pulseaudio libpulse0 \
       libxss1 libsdl2-2.0-0:i386 && \
     apt-get install -qy \
+      libx11-6 \
       libgl1-mesa-dri:i386 libgl1-mesa-glx:i386 \
       libsdl2-2.0-0:i386 \
       libopenal1:i386 libpulse0:i386 libasound2:i386 libasound2-plugins:i386 \
