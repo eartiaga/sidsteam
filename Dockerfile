@@ -39,17 +39,17 @@ RUN apt-get install -qy steam-launcher && \
 ENV STEAM_RUNTIME 1
 
 # Install Steam dependencies
-RUN apt-get install -qy \
+RUN apt-get install --no-install-recommends -qy \
       locales libgconf-2-4 \
       libstdc++5 libc6 \
       libnm-util2 libnm-glib4 libnss3 \
       pulseaudio libpulse0 \
       libxss1 libsdl2-2.0-0:i386 && \
-    apt-get install -qy \
+    apt-get install --no-install-recommends -qy \
       libx11-6 \
       libgl1-mesa-dri:i386 libgl1-mesa-glx:i386 \
       libsdl2-2.0-0:i386 \
-      libopenal1:i386 libpulse0:i386 libasound2:i386 libasound2-plugins:i386 \
+      libopenal1:i386 libpulse0:i386 libasound2:i386 \
       libusb-1.0-0:i386 libudev1:i386 libdbus-glib-1-2:i386 \
       libstdc++5:i386 \
       libglib2.0-0:i386 libgtk2.0-0:i386 libcanberra-gtk-module:i386 \
