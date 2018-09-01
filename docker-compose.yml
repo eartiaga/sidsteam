@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   sidsteam:
@@ -15,15 +15,17 @@ services:
       - /etc/machine-id:/etc/machine-id:ro
       - $XDG_RUNTIME_DIR/pulse:/run/user/1000/pulse
       # Persistent directory for steam data
-      - ${STEAM_DATADIR}:/home/${STEAM_USER}
+      - ${STEAM_DATADIR:-./data}:/home/${STEAM_USER:-steam}
     devices:
       - /dev/nvidia0
       - /dev/nvidiactl
       - /dev/nvidia-modeset
       - /dev/dri
       - /dev/snd
+      - /dev/sr0
     environment:
       - DISPLAY=unix$DISPLAY
       - PULSE_SERVER=unix:$XDG_RUNTIME_DIR/pulse/native
-    shm_size: 2G
+      - STEAM_SKIP=${STEAM_SKIP:-no}
+    shm_size: 4G
 

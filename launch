@@ -3,5 +3,33 @@
 # Log everything to stdout
 exec 2>&1
 
-# Start steam launcher
-su -p "$USER" -c "steam $@"
+export DATADIR="$HOME"
+
+# Bail out on failure
+set -e
+
+case "$STEAM_SKIP" in
+    wait)
+        zenity --info --text="Steam Docker on stand-by. Click OK to terminate."
+        wait
+        ;;
+    shell)
+        x-terminal-emulator
+        wait
+        ;;
+    yes)
+        if [ -x "$DATADIR/launch.rc" ]; then
+            echo "running user launcher..."
+            source "$DATADIR/launch.rc"
+        fi
+        wait
+        ;;
+    *)
+        # Start steam
+        echo "starting steam..."
+        /usr/games/steam
+        wait
+        echo "steam terminated"
+        ;;
+esac
+
