@@ -5,8 +5,8 @@ services:
     build:
       context: .
       args:
-        steam_user: "${STEAM_USER}"
-        steam_uid: "${STEAM_UID}"
+          steam_user: "${STEAM_USER:-steam}"
+          steam_uid: "${STEAM_UID:-1001}"
     image: eartiaga/sidsteam
     network_mode: bridge
     volumes:

@@ -1,8 +1,8 @@
 FROM debian:sid
 MAINTAINER Ernest Artiaga <ernest.artiaga@eartiam.net>
 
-ARG steam_user
-ARG steam_uid
+ARG steam_user=steam
+ARG steam_uid=1001
 
 # To avoid problems with Dialog and curses wizards
 ENV DEBIAN_FRONTEND noninteractive
