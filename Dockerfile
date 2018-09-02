@@ -36,19 +36,10 @@ COPY ./dnsmasq.conf /etc/dnsmasq.conf
 
 # Install nvdia support files
 RUN apt-get install -qy \
-      libaudit1:i386 \
-      libgl1-nvidia-glx \
-      libgl1-nvidia-glx:i386 \
-      libnvidia-ml1 \
-      libnvidia-ml1:i386 \
       nvidia-detect \
       nvidia-driver-bin:i386 \
-      nvidia-settings:i386 \
-      nvidia-smi:i386 \
-      nvidia-vdpau-driver \
-      nvidia-vdpau-driver:i386 \
-      xserver-xorg-core:i386 \
-      xserver-xorg-video-nvidia:i386
+      nvidia-driver-libs-nonglvnd \
+      nvidia-driver-libs-nonglvnd:i386
 
 # Setup sudo
 RUN apt-get install -qy sudo && \
@@ -61,8 +52,9 @@ ENV UID $steam_uid
 ENV HOME /home/$steam_user
 RUN adduser --disabled-password --gecos 'Steam User' \
       --home "$HOME" --uid "$UID" $USER && \
-    adduser $USER video && \
-    adduser $USER audio
+    adduser $USER audio && \
+    adduser $USER cdrom && \
+    adduser $USER video
 
 # Workaround for steam license issues: https://askubuntu.com/questions/506909/how-can-i-accept-the-lience-agreement-for-steam-prior-to-apt-get-install/1017487#1017487
 RUN echo steam steam/question select 'I AGREE' | debconf-set-selections
@@ -73,9 +65,13 @@ RUN apt-get install -qy steam
 
 # Install Steam game dependencies
 RUN apt-get install --no-install-recommends -qy \
+      alsa-utils \
+      libasound2 \
+      libasound2-plugins \
       libc6 \
       libcanberra-gtk-module \
       libgconf-2-4 \
+      libglu1 \
       libnm-glib4 \
       libnm-util2 \
       libnss3 \
@@ -84,18 +80,19 @@ RUN apt-get install --no-install-recommends -qy \
       libsdl1.2debian \
       libsdl2-2.0-0 \
       libstdc++5 \
+      libstdc++6 \
       libx11-6 \
       libxss1 \
       libxv1 \
       libxvidcore4 \
-      locales \
-      phonon \
-      pulseaudio
+      locales
 
 # Install 32-bit Steam game dependencies
 # (ref: https://wiki.debian.org/Steam)
 RUN apt-get install --no-install-recommends -qy \
+      alsa-utils:i386 \
       libasound2:i386 \
+      libasound2-plugins:i386 \
       libbz2-1.0:i386 \
       libcanberra-gtk-module:i386 \
       libcurl4:i386 \
@@ -103,8 +100,7 @@ RUN apt-get install --no-install-recommends -qy \
       libdbus-glib-1-2:i386 \
       libgcrypt20:i386 \
       libgdk-pixbuf2.0-0:i386 \
-      libgl1-mesa-dri:i386 \
-      libgl1-mesa-glx:i386 \
+      libglu1:i386 \
       libglib2.0-0:i386 \
       libgpg-error0:i386 \
       libgtk2.0-0:i386 \
@@ -120,23 +116,26 @@ RUN apt-get install --no-install-recommends -qy \
       libusb-1.0-0:i386 \
       librtmp1:i386 \
       libstdc++5:i386 \
-      libva-drm2:i386 \
-      libva-glx2:i386 \
-      libva-wayland2:i386 \
-      libva-x11-2:i386 \
-      libva2:i386 \
+      libstdc++6:i386 \
       libxrandr2:i386 \
       libxtst6:i386 \
       libxv1:i386 \
       libxvidcore4:i386 \
-      phonon:i386 \
-      vdpau-va-driver:i386
+      mesa-utils:i386 \
+      mesa-utils-extra:i386 \
+      pulseaudio:i386 \
+      pulseaudio-utils:i386 \
+      x11-utils:i386
 
 # Install game packager and gog downloader
 RUN apt-get install -qy \
       game-data-packager \
       game-data-packager-runtime \
       lgogdownloader
+
+# Clean up
+RUN apt-get upgrade -qy && \
+    apt-get autoremove -qy
 
 # Workaround for games using old libraries
 RUN ln -sv librtmp.so.1 /lib/i386-linux-gnu/librtmp.so.0 && \
@@ -154,7 +153,8 @@ ADD http://archive.ubuntu.com/ubuntu/pool/main/libg/libgcrypt11/libgcrypt11_1.5.
 RUN cd /tmp && dpkg -i *.deb && rm -f *.deb
 
 # Pulse workarounds
-RUN echo "enable-shm = no" >> /etc/pulse/client.conf
+RUN echo "enable-shm = no" >> /etc/pulse/client.conf && \
+    echo "autospawn = no" >> /etc/pulse/client.conf
 
 # Steam runtime
 ENV STEAM_RUNTIME 1

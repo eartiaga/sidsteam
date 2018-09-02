@@ -39,7 +39,7 @@ variables take precedence over the file. The relevant variables are:
 
 * STEAM_DATADIR: The directory that the Steam launcher will use to store
   local data. It defaults to a directory named `data` in the repository's
-  root.
+  root, and it is bound to the in-docker's user home directory.
 
 * STEAM_UID: This should be the uid of a user with write permissions on the
   `STEAM_DATADIR` directory. It defaults to `1001` (a convenient value for
@@ -48,6 +48,30 @@ variables take precedence over the file. The relevant variables are:
 
 * STEAM_USER: The name of the non-root user inside the container. It defaults
   to `steam`, but it can be changed according to taste.
+
+* STEAM_SKIP: Instead of starting steam, perform an alternative action:
+  * wait: leave the container on stand-by (in case you want to connect by other means)
+  * shell: start an interactive shell (so you can temporarily tweak it)
+  * yes: execute the contents of $WINE_DATADIR/launch.rc, instead of steam (useful to
+    play other native games that require 32-bit support)
+  * no: perform the default action (i.e. start steam)
+
+Troubleshooting
+---------------
+
+* In case you have trouble resolving dns names when building the docker, make sure
+  you have set the dns servers in the /etc/docker/daemon.json file. It should contain
+  something like:
+
+  ```
+  {
+    ...
+    "dns": [ "<your_dns_server_ip>" ]
+  }
+  ```
+  (create the file if it does not exist; and you may use google's dns server 8.8.8.8 in case of
+  need; then, restart docker, e.g. with `systemctl restart docker`)
+
 
 Disclaimer
 ----------
