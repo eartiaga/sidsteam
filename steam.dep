@@ -1,4 +1,4 @@
-# Install 32-bit Steam game dependencies
+# Install 64-bit and 32-bit Steam game dependencies
 # (ref: https://wiki.debian.org/Steam)
 alsa-utils
 gettext
@@ -8,12 +8,11 @@ gstreamer1.0-plugins-good
 libasound2
 libasound2-plugins
 libattr1
-libcdio18
+libcdio19
 libbz2-1.0
 libcanberra-gtk-module
-libcdio18
 libcurl4
-libcurl4-openssl-dev
+#libcurl4-openssl-dev
 libdbus-1-3
 libdbus-glib-1-2
 libfaudio0

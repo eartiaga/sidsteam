@@ -30,6 +30,7 @@ RUN echo steam steam/license note '' | debconf-set-selections
 # Dependency lists
 COPY ./packages.dep /tmp/packages.dep
 COPY ./steam.dep /tmp/steam.dep
+COPY ./steam_i386.dep /tmp/steam_i386.dep
 
 # Install basic packages and dependencies
 RUN apt-get update -qy && \
@@ -38,6 +39,8 @@ RUN apt-get update -qy && \
         awk '$1 ~ /^[^#]/' /tmp/steam.dep | \
         xargs apt-get install -qy && \
         awk '$1 ~ /^[^#]/ {print $1 ":i386"}' /tmp/steam.dep | \
+        xargs apt-get install -qy && \
+        awk '$1 ~ /^[^#]/ {print $1 ":i386"}' /tmp/steam_i386.dep | \
         xargs apt-get install -qy && \
         apt-get autoremove -qy && \
         rm -rf /var/lib/apt/lists/*

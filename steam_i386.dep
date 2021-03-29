@@ -1,0 +1,4 @@
+# Install 32-bit Steam game dependencies
+# (ref: https://wiki.debian.org/Steam)
+libcurl4-openssl-dev
+
