@@ -8,7 +8,7 @@ export DATADIR="$HOME"
 # Bail out on failure
 set -e
 
-case "$STEAM_SKIP" in
+case "$STEAM_ACTION" in
     wait)
         zenity --info --text="Steam Docker on stand-by. Click OK to terminate."
         wait
@@ -17,9 +17,9 @@ case "$STEAM_SKIP" in
         x-terminal-emulator
         wait
         ;;
-    yes)
+    custom)
         if [ -x "$DATADIR/launch.rc" ]; then
-            echo "running user launcher..."
+            echo "running custom user launcher..."
             source "$DATADIR/launch.rc"
         fi
         wait
@@ -27,7 +27,7 @@ case "$STEAM_SKIP" in
     *)
         # Start steam
         echo "starting steam..."
-        /usr/games/steam
+        /usr/bin/steam
         wait
         echo "steam terminated"
         ;;
